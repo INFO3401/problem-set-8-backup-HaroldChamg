@@ -1,0 +1,46 @@
+import pandas as pd
+import re
+
+
+def generateCleanFile(input_file, output_file):
+    text_df = pd.read_csv("dd-comment-profile.csv", encoding="latin1")
+    text_df
+
+len(text_df)
+
+#Remove html tag
+
+
+def cleanhtml(raw_html):
+  cleanr = re.compile('<.*?>')
+  cleantext = re.sub(cleanr, '', raw_html)
+  return cleantext
+
+cleanr = re.compile('<.*?>')
+text_df['comment_msg'] = text_df['comment_msg'].apply(lambda x: re.sub(cleanr, '', str(x).strip()))
+# print(cleanhtml('<div><em><font size="4" face="Comic Sans MS">'))
+text_df
+
+
+#Remove spam
+
+spam = ['app', 'free', '%20', 'check out my page', 'www.', 'http://']
+no_spam = text_df[~text_df['comment_msg'].str.contains('|'.join(spam),na = False)]
+no_spam
+
+len(no_spam)
+
+
+#RemoveNull
+
+def cleanNull (no_spam):
+    no_spam = no_spam[(no_spam['comment_msg'] != 'nan') & (no_spam['comment_msg'] != '')]
+    return no_spam
+Null_Removed = cleanNull(no_spam)
+Null_Removed
+
+
+len(Null_Removed)
+
+
+generateCleanFile("dd-comment-profile.csv", "dd-comment-profile-sorted.csv")
